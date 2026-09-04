@@ -266,7 +266,13 @@ class TestGodDaemonHTTPAPI:
         cls.server = god_daemon.ThreadingHTTPServer(("127.0.0.1", cls.port), GodDaemonHTTPHandler)
         cls.server_thread = threading.Thread(target=cls.server.serve_forever, daemon=True)
         cls.server_thread.start()
-        time.sleep(0.3)
+        # Verify server is listening
+        for _ in range(20):
+            try:
+                with socket.create_connection(("127.0.0.1", cls.port), timeout=0.5):
+                    break
+            except Exception:
+                time.sleep(0.1)
 
     @classmethod
     def teardown_class(cls):
@@ -293,17 +299,22 @@ class TestGodDaemonHTTPAPI:
             return e.code, json.loads(e.read().decode("utf-8"))
 
     def test_get_health(self):
-        status, data = self._get("/health")
-        assert status == 200
-        assert data["status"] == "ok"
-        assert data["service"] == "god_daemon"
-        assert "endpoints" in data
+        mock_tel = {"uid": 2000, "privilege": "UID 2000 (Shell / Shizuku)", "battery": {"level": 85}, "volume": {"level": 10}}
+        with patch.object(self.controller, "get_telemetry", return_value=mock_tel):
+            status, data = self._get("/health")
+            assert status == 200
+            assert data["status"] == "ok"
+            assert data["service"] == "god_daemon"
+            assert "endpoints" in data
 
     def test_get_state(self):
-        status, data = self._get("/state")
-        assert status == 200
-        assert "uid" in data
-        assert "battery" in data
+        mock_tel = {"uid": 2000, "privilege": "UID 2000 (Shell / Shizuku)", "battery": {"level": 85}, "volume": {"level": 10}}
+        with patch.object(self.controller, "get_telemetry", return_value=mock_tel):
+            status, data = self._get("/state")
+            assert status == 200
+            assert "uid" in data
+            assert "battery" in data
+
 
     def test_post_tap(self):
         with patch.object(self.controller, "tap", return_value={"action": "tap", "success": True, "x": 100, "y": 200}):
