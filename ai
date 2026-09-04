@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Autonomous Android Controller - CLI Execution Wrapper
+# Zero-boilerplate execution entrypoint for mobile Termux and Linux shells.
+# ==============================================================================
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Resolve Python 3 executable across environments
+PYTHON_BIN="python3"
+if ! command -v python3 >/dev/null 2>&1 && command -v python >/dev/null 2>&1; then
+    PYTHON_BIN="python"
+fi
+
+if [ -f "$SCRIPT_DIR/master_agent.py" ]; then
+    exec "$PYTHON_BIN" "$SCRIPT_DIR/master_agent.py" "$@"
+elif [ -f "/sdcard/agent/master_agent.py" ]; then
+    exec "$PYTHON_BIN" "/sdcard/agent/master_agent.py" "$@"
+else
+    exec "$PYTHON_BIN" -m master_agent "$@"
+fi

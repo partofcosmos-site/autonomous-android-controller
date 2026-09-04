@@ -1,0 +1,78 @@
+# ==============================================================================
+# AUTONOMOUS ANDROID CONTROLLER (.gitignore)
+# Comprehensive Defense-in-Depth Privacy & Artifact Exclusion
+# ==============================================================================
+
+# 1. Environment Variables, Credentials & Secret Vaults
+.env
+.env.*
+!.env.example
+*.env
+*.key
+*.pem
+*.token
+*.pat
+credentials.json
+*_secret*
+*secret*
+
+# 2. Diagnostic Logs, Execution Traces & Verification Reports
+*.log
+*.log.*
+logs/
+*.json.log
+provider_verification_report.json
+full_env_audit_report.json
+openrouter_benchmark_report.json
+benchmark_50_results.json
+*_results.json
+
+# 3. Android Screen Dumps & UI Hierarchy Cache
+*.xml
+window_dump.xml
+local_dump.xml
+/data/local/tmp/
+*.tmp
+*.dump
+
+# 4. Device Screenshots, Screen Recordings & Media Buffers
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.mp4
+*.wav
+*.mp3
+screenshots/
+captures/
+agent_screenshot*.png
+
+# 5. Python Bytecode, Caches & Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+venv/
+.venv/
+env/
+ENV/
+
+# 6. Local Databases & SQLite
+*.db
+*.sqlite
+*.sqlite3
+memory.db
+
+# 6. Operating System & IDE Metadata
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

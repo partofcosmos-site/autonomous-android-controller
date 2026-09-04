@@ -1,0 +1,12 @@
+root ::= "{" ws "\"thought\":" ws string "," ws "\"action\":" ws action_type "," ws "\"params\":" ws object "}" ws
+
+action_type ::= "\"tap\"" | "\"type\"" | "\"key\"" | "\"volume\"" | "\"brightness\"" | "\"open_app\"" | "\"shell\"" | "\"call\"" | "\"alarm\"" | "\"navigation\"" | "\"mode\"" | "\"notifications\"" | "\"search\"" | "\"done\""
+
+object ::= "{" ws ( member ( "," ws member )* )? "}" ws
+member ::= string ":" ws value
+
+value ::= object | array | string | number | "true" | "false" | "null"
+array ::= "[" ws ( value ( "," ws value )* )? "]" ws
+string ::= "\"" ( [^"\\] | "\\" ( ["\\/bfnrt] | "u" [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F] [0-9a-fA-F] ) )* "\"" ws
+number ::= ("-"? ([0-9] | [1-9] [0-9]*)) ("." [0-9]+)? ([eE] [-+]? [0-9]+)? ws
+ws ::= [ \t\n\r]*
